@@ -1,0 +1,464 @@
+:root {
+    --background: #ececec;
+    --surface: #ffffff;
+    --surface-sunken: #fafafa;
+    --sidebar: #f5f5f5;
+    --border: #dcdcdc;
+    --border-strong: #c4c4c4;
+    --grid: #efefef;
+    --text: #1d1d1f;
+    --muted: #6e6e73;
+    --bar: #a3a3a3;
+    --comparing: #c98d1c;
+    --swapping: #c4473f;
+    --sorted: #3d8b5f;
+    --accent: #1d1d1f;
+    --accent-hover: #3a3a3c;
+    --on-accent: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #1e1e1e;
+        --surface: #1a1a1a;
+        --surface-sunken: #161616;
+        --sidebar: #232323;
+        --border: #303030;
+        --border-strong: #424242;
+        --grid: #222222;
+        --text: #e5e5e7;
+        --muted: #98989d;
+        --bar: #646464;
+        --comparing: #d2a042;
+        --swapping: #cf5b52;
+        --sorted: #4f9d70;
+        --accent: #e5e5e7;
+        --accent-hover: #ffffff;
+        --on-accent: #1a1a1a;
+    }
+}
+
+/* sharp corners everywhere, and no bold text: hierarchy comes from size and color */
+* {
+    box-sizing: border-box;
+    border-radius: 0;
+}
+
+h1,
+h2,
+dt,
+dd,
+output,
+button,
+select {
+    font-weight: 400;
+}
+
+/* the page fills the window like a desktop app: title bar, workspace, status bar */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.35;
+    background: var(--background);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ----- title bar ----- */
+
+.titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    flex-shrink: 0;
+    background: var(--sidebar);
+    border-bottom: 1px solid var(--border);
+}
+
+.titlebar h1 {
+    margin: 0;
+    font-size: 13px;
+}
+
+.workspace {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ----- inspector sidebar ----- */
+
+.inspector {
+    width: 240px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 16px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.group-title {
+    margin: 0;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    row-gap: 8px;
+}
+
+.row-label {
+    font-size: 12px;
+}
+
+.row output {
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.row input {
+    grid-column: 1 / -1;
+}
+
+/* flat slider with a square handle, so the browser's rounded default is not used */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 14px;
+    margin: 0;
+    background: transparent;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 2px;
+    background: var(--border-strong);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 14px;
+    margin-top: -6px;
+    background: var(--surface);
+    border: 1px solid var(--muted);
+    border-radius: 0;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 2px;
+    background: var(--border-strong);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 10px;
+    height: 14px;
+    background: var(--surface);
+    border: 1px solid var(--muted);
+    border-radius: 0;
+}
+
+select,
+button {
+    width: 100%;
+    height: 24px;
+    font: inherit;
+    font-size: 13px;
+    padding: 0 8px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* a square dropdown with a small arrow drawn by two gradients */
+select {
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 24px;
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+        linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 13px) 10px, calc(100% - 9px) 10px;
+    background-size: 4px 4px;
+    background-repeat: no-repeat;
+}
+
+button {
+    cursor: default;
+}
+
+button:hover:not(:disabled) {
+    background: var(--surface-sunken);
+}
+
+button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+}
+
+button.primary:hover:not(:disabled) {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+select:focus-visible,
+button:focus-visible,
+input:focus-visible {
+    outline: 1px solid var(--text);
+    outline-offset: 1px;
+}
+
+button:disabled,
+select:disabled,
+input:disabled {
+    opacity: 0.4;
+}
+
+/* ----- canvas with one or two plots ----- */
+
+.panels {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    background: var(--surface);
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.panel + .panel {
+    border-left: 1px solid var(--border);
+}
+
+.panel.hidden {
+    display: none;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 32px;
+    flex-shrink: 0;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-title {
+    margin: 0;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.stats {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.stats dt {
+    color: var(--muted);
+}
+
+.stats dd {
+    margin: 0 14px 0 0;
+    min-width: 4ch;
+    font-variant-numeric: tabular-nums;
+}
+
+.stats dd:last-child {
+    margin-right: 0;
+}
+
+.plot {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    padding: 20px 16px 20px 0;
+    background: var(--surface-sunken);
+}
+
+/* value labels down the left side, lined up with the grid lines */
+.axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40px;
+    flex-shrink: 0;
+    padding-right: 8px;
+    margin: -7px 0;
+    text-align: right;
+    font-size: 10px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* faint horizontal grid lines every 25% */
+.bars {
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    gap: 1px;
+    min-width: 0;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px);
+    background-size: 100% 25%;
+    border-top: 1px solid var(--grid);
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.bar {
+    flex: 1;
+    background: var(--bar);
+}
+
+.bar.comparing {
+    background: var(--comparing);
+}
+
+.bar.swapping {
+    background: var(--swapping);
+}
+
+.bar.sorted {
+    background: var(--sorted);
+}
+
+/* ----- status bar ----- */
+
+.statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 24px;
+    flex-shrink: 0;
+    padding: 0 12px;
+    background: var(--sidebar);
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.legend {
+    display: flex;
+    gap: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.swatch {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 3px;
+    background: var(--bar);
+}
+
+.swatch.comparing {
+    background: var(--comparing);
+}
+
+.swatch.swapping {
+    background: var(--swapping);
+}
+
+.swatch.sorted {
+    background: var(--sorted);
+}
+
+.statusbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* the version sits after a thin divider, like a build number in an app's status bar */
+.version {
+    padding-left: 12px;
+    border-left: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--border-strong);
+}
+
+.status.running {
+    color: var(--text);
+}
+
+.status.running::before {
+    background: var(--sorted);
+}
+
+/* on small screens the sidebar moves above the plots and the page scrolls */
+@media (max-width: 700px) {
+    html,
+    body {
+        height: auto;
+    }
+
+    .workspace {
+        flex-direction: column;
+    }
+
+    .inspector {
+        width: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .panels {
+        flex-direction: column;
+    }
+
+    .panel + .panel {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+    }
+
+    .plot {
+        height: 260px;
+        flex: none;
+    }
+}
